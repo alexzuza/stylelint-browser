@@ -2,14 +2,14 @@ import webpack from "webpack"
 import path from "path"
 
 export default {
-  entry: "./site/index.js",
+  mode: 'production',
+  entry: ["./site/index.js"],
   output: {
     path: path.resolve(__dirname, "site"),
     publicPath: "/",
     filename: "bundle.js",
   },
   resolve: {
-    // root: path.resolve(__dirname),
     alias: {
       "resolve-from": "empty-module",
       cosmiconfig: "cosmiconfig-module",
@@ -31,14 +31,14 @@ export default {
     rules: [
       {
         test: /\.js$/,
-        loader: "babel-loader",
-        // exclude: /node_modules/, without UglifyJsPlugin
-        exclude: /(lodash|postcss-sass|gonzales|crypto-browserify)/ // we have to compile a lot of es6 for UglifyJsPlugin
-      },
-      {
-        test: /\.json$/,
-        loader: "json-loader",
-      },
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        },
+        exclude: /(lodash|gonzales)/
+      }
     ],
   },
   plugins: [
